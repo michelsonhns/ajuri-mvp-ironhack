@@ -53,7 +53,7 @@ export function VolunteerPage({
     <Box
       sx={{
         maxWidth: 390,
-        minHeight: '100dvh',
+        minHeight: 'calc(100dvh - var(--tester-instructions-height, 0px))',
         mx: 'auto',
         display: 'flex',
         flexDirection: 'column',

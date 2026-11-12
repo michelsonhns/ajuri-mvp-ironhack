@@ -45,6 +45,8 @@ L’interface est en anglais, conformément aux écrans de démonstration Figma.
 
 Le lien « Test roles » revient à l’accueil. « Reset prototype data » réinitialise les données fictives. La page des remplacements propose également une simulation d’absence pour lancer le scénario depuis Camila.
 
+Les consignes de la section Figma **9 · Test EN** apparaissent dans des snackbars persistantes : tâche 1 sur le tableau de bord, tâche 2 pour Pedro, tâche 3 après signalement d’une absence et tâche 4 sur la demande d’Ana. « Next task → » simule l’absence de Pedro pour passer de la tâche 1 à la tâche 3. Les écrans de fin des tâches 2, 3 et 4 affichent la question de facilité et « Back to start ». La note est demandée oralement au testeur, sans collecte automatique. Les consignes peuvent être réduites puis rouvertes ; elles n’expirent pas et leur espace est réservé pour laisser les actions accessibles.
+
 Les données restent dans le navigateur (`localStorage`, clé `ajuri-prototype-v1`). Les onglets partagent les données après rechargement ; aucune synchronisation serveur n’est prévue. Les invitations et messages sont simulés, sans envoi externe. Le semestre et les noms sont des données de démonstration. Ne pas saisir de données personnelles réelles.
 
 La page Schedule reprend la vue des créneaux du tableau de bord : aucun calendrier complet hors maquette n’est ajouté. Les six bénévoles visibles représentent l’échantillon du prototype.
