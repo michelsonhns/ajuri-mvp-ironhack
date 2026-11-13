@@ -70,6 +70,21 @@ export function StartPage() {
         <Alert severity="info" icon={false} sx={{ mt: 3 }}>
           The facilitator will tell you which role to start with. Names and teams are fictional.
         </Alert>
+        <Panel sx={{ mt: 3 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} gap={2} alignItems={{ sm: 'center' }}>
+            <Box sx={{ flex: 1 }}>
+              <Typography component="h2" variant="h4">
+                Finished testing?
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Share your ratings and comments in one short questionnaire.
+              </Typography>
+            </Box>
+            <Button component={Link} to="/feedback" variant="outlined">
+              Give feedback
+            </Button>
+          </Stack>
+        </Panel>
         <Stack direction="row" mt={3} gap={1} flexWrap="wrap">
           <Button component={Link} to="/setup/1">
             Set up a team

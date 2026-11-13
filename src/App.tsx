@@ -9,6 +9,7 @@ import { SetupPage } from './pages/SetupPage';
 import { TeamPage } from './pages/TeamPage';
 import { ChecklistsPage } from './pages/ChecklistsPage';
 import { TesterInstructions } from './components/organisms/TesterInstructions';
+import { FeedbackPage } from './pages/FeedbackPage';
 
 function RouteFocus() {
   const { pathname } = useLocation();
@@ -36,6 +37,7 @@ export function App() {
       <Box sx={{ pb: 'var(--tester-instructions-height, 0px)' }}>
         <Routes>
           <Route path="/" element={<StartPage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/coordinator" element={<BoardPage />} />
           <Route path="/schedule" element={<BoardPage schedule />} />
           <Route path="/replacements" element={<ReplacementPage />} />

@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import type { TestInstruction } from '../../domain/testInstructions';
 import { tokens } from '../../theme/tokens';
+import { Link } from 'react-router-dom';
 
 interface Props {
   instruction: TestInstruction;
@@ -166,6 +167,22 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
               )}
               <Typography variant="body2">{instruction.description}</Typography>
             </Box>
+            {instruction.action === 'back-to-start' && (
+              <Button
+                component={Link}
+                to="/feedback"
+                variant="outlined"
+                sx={{
+                  color: tokens.color.onPrimary,
+                  borderColor: tokens.color.secondary,
+                  flexShrink: 0,
+                  width: compact ? '100%' : 'auto',
+                  '&:focus-visible': { outlineColor: tokens.color.secondary },
+                }}
+              >
+                Give feedback
+              </Button>
+            )}
             {action}
             {!compact && close}
           </>
