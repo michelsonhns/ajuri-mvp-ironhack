@@ -8,13 +8,16 @@ import '@fontsource/nunito-sans/latin-800.css';
 import { App } from './App';
 import { theme } from './theme/theme';
 import { DemoProvider } from './state/DemoProvider';
+import { LocaleProvider } from './i18n/LocaleProvider';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <DemoProvider>
-        <App />
+        <LocaleProvider>
+          <App />
+        </LocaleProvider>
       </DemoProvider>
     </ThemeProvider>
   </StrictMode>,

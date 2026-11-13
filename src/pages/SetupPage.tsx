@@ -1,3 +1,4 @@
+import { useTranslation } from '../i18n/LocaleProvider';
 import { useState } from 'react';
 import {
   Alert,
@@ -20,8 +21,8 @@ import { Initials, Logo, Panel, TeamTag } from '../components/atoms/Primitives';
 import { members } from '../domain/model';
 import { useDemo } from '../state/DemoProvider';
 import { tokens } from '../theme/tokens';
-
 export function SetupPage() {
+  const { t } = useTranslation();
   const { step = '1' } = useParams();
   const current = Math.min(3, Math.max(1, Number(step) || 1));
   const navigate = useNavigate();
@@ -41,8 +42,15 @@ export function SetupPage() {
         : `Who helps the ${state.teamName}?`;
   return (
     <>
-      <Stack component="header" direction="row" justifyContent="space-between" sx={{ p: 3 }}>
-        <Link to="/" aria-label="Ajuri prototype home">
+      <Stack
+        component="header"
+        direction="row"
+        justifyContent="space-between"
+        sx={{
+          p: 3,
+        }}
+      >
+        <Link to="/" aria-label={t('Ajuri prototype home')}>
           <Logo full />
         </Link>
         <Initials name="Camila Ferreira" />
@@ -51,34 +59,56 @@ export function SetupPage() {
         component="main"
         id="main-content"
         tabIndex={-1}
-        sx={{ maxWidth: 1008, px: 3, mx: 'auto', py: 3 }}
+        sx={{
+          maxWidth: 1008,
+          px: 3,
+          mx: 'auto',
+          py: 3,
+        }}
       >
-        <Stepper activeStep={current - 1} sx={{ maxWidth: 640, mb: 3 }}>
+        <Stepper
+          activeStep={current - 1}
+          sx={{
+            maxWidth: 640,
+            mb: 3,
+          }}
+        >
           {['Team & functions', 'Semester goals', 'Your team’s volunteers'].map((label) => (
             <Step key={label}>
-              <StepLabel>{label}</StepLabel>
+              <StepLabel>{t(label)}</StepLabel>
             </Step>
           ))}
         </Stepper>
         <Typography variant="h1" component="h1">
-          {title}
+          {t(title)}
         </Typography>
         <Typography color="text.secondary" mt={1} mb={3}>
-          {current === 1
-            ? 'Let’s set up your team in 3 short steps. You can change everything later.'
-            : current === 2
-              ? 'Goals appear on your Live board, so you see at a glance how the semester is going.'
-              : 'We found 24 members in your association. Select the people who help your team.'}
+          {t(
+            current === 1
+              ? 'Let’s set up your team in 3 short steps. You can change everything later.'
+              : current === 2
+                ? 'Goals appear on your Live board, so you see at a glance how the semester is going.'
+                : 'We found 24 members in your association. Select the people who help your team.',
+          )}
         </Typography>
         {feedback && (
-          <Alert sx={{ mb: 2 }} severity="success" onClose={() => setFeedback('')}>
-            {feedback}
+          <Alert
+            sx={{
+              mb: 2,
+            }}
+            severity="success"
+            onClose={() => setFeedback('')}
+          >
+            {t(feedback)}
           </Alert>
         )}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 596fr) minmax(0, 340fr)' },
+            gridTemplateColumns: {
+              xs: '1fr',
+              md: 'minmax(0, 596fr) minmax(0, 340fr)',
+            },
             gap: 3,
             alignItems: 'start',
           }}
@@ -87,20 +117,24 @@ export function SetupPage() {
             {current === 1 && (
               <Panel>
                 <Typography component="h2" variant="h4" mb={2}>
-                  Your team
+                  {t('Your team')}
                 </Typography>
                 <TextField
                   fullWidth
-                  label="Team name"
-                  value={state.teamName}
-                  onChange={(e) => update({ teamName: e.target.value })}
-                  helperText="Shown to your volunteers"
+                  label={t('Team name')}
+                  value={t(state.teamName)}
+                  onChange={(e) =>
+                    update({
+                      teamName: e.target.value,
+                    })
+                  }
+                  helperText={t('Shown to your volunteers')}
                 />
                 <Typography variant="h4" component="h2" mt={2}>
-                  Functions in your team
+                  {t('Functions in your team')}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" mt={1}>
-                  Each function has its own checklist, shown to the volunteer on shift day.
+                  {t('Each function has its own checklist, shown to the volunteer on shift day.')}
                 </Typography>
                 {functions.map((f, i) => (
                   <Stack
@@ -109,28 +143,40 @@ export function SetupPage() {
                     justifyContent="space-between"
                     alignItems="center"
                     gap={1}
-                    sx={{ py: 1, borderBottom: 1, borderColor: 'divider', mt: 1 }}
+                    sx={{
+                      py: 1,
+                      borderBottom: 1,
+                      borderColor: 'divider',
+                      mt: 1,
+                    }}
                   >
-                    <Typography fontWeight={600}>{f}</Typography>
+                    <Typography fontWeight={600}>{t(f)}</Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Checklist · {[7, 5, 4, 3][i] ?? 0} tasks
+                      {t('Checklist · ')}
+                      {t([7, 5, 4, 3][i] ?? 0)}
+                      {t(' tasks')}
                     </Typography>
                     <Button
                       onClick={() => setDialog(`checklist:${f}`)}
-                      sx={{ px: 1, fontSize: 14 }}
+                      sx={{
+                        px: 1,
+                        fontSize: 14,
+                      }}
                     >
-                      Edit checklist
+                      {t('Edit checklist')}
                     </Button>
                   </Stack>
                 ))}
                 <Button
-                  sx={{ mt: 2 }}
+                  sx={{
+                    mt: 2,
+                  }}
                   onClick={() => {
                     setInput('');
                     setDialog('function');
                   }}
                 >
-                  + Add a function
+                  {t('+ Add a function')}
                 </Button>
               </Panel>
             )}
@@ -138,24 +184,31 @@ export function SetupPage() {
               <Stack gap={3}>
                 <Panel>
                   <Typography component="h2" variant="h4" mb={2}>
-                    Semester
+                    {t('Semester')}
                   </Typography>
                   <TextField
                     select
                     fullWidth
-                    label="Period"
-                    defaultValue="spring"
-                    slotProps={{ select: { native: true } }}
-                    helperText="Dates come from your association calendar"
+                    label={t('Period')}
+                    defaultValue={t('spring')}
+                    slotProps={{
+                      select: {
+                        native: true,
+                      },
+                    }}
+                    helperText={t('Dates come from your association calendar')}
                   >
-                    <option value="spring">Spring 2027 · 11 Jan → 27 Jun</option>
-                    <option value="autumn">Autumn 2027 · 6 Sep → 19 Dec</option>
+                    <option value="spring">{t('Spring 2027 · 11 Jan → 27 Jun')}</option>
+                    <option value="autumn">{t('Autumn 2027 · 6 Sep → 19 Dec')}</option>
                   </TextField>
                 </Panel>
                 <Box
                   sx={{
                     display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                      sm: '1fr 1fr',
+                    },
                     gap: 3,
                   }}
                 >
@@ -179,14 +232,14 @@ export function SetupPage() {
                   ].map(([label, description, unit], i) => (
                     <Panel key={label}>
                       <Typography fontWeight={700} component="h2">
-                        {label}
+                        {t(label)}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" my={1.5}>
-                        {description}
+                        {t(description)}
                       </Typography>
                       <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Button
-                          aria-label={`Decrease ${label}`}
+                          aria-label={t(`Decrease ${label}`)}
                           onClick={() =>
                             update({
                               goals: state.goals.map((v, n) =>
@@ -196,15 +249,18 @@ export function SetupPage() {
                               ),
                             })
                           }
-                          sx={{ px: 0, borderRadius: '50%' }}
+                          sx={{
+                            px: 0,
+                            borderRadius: '50%',
+                          }}
                         >
-                          −
+                          {t('−')}
                         </Button>
                         <Typography variant="h2" color="primary" aria-live="polite">
-                          {state.goals[i]} {unit}
+                          {t(state.goals[i])} {t(unit)}
                         </Typography>
                         <Button
-                          aria-label={`Increase ${label}`}
+                          aria-label={t(`Increase ${label}`)}
                           onClick={() =>
                             update({
                               goals: state.goals.map((v, n) =>
@@ -214,9 +270,13 @@ export function SetupPage() {
                               ),
                             })
                           }
-                          sx={{ px: 0, borderRadius: '50%', bgcolor: tokens.color.secondary }}
+                          sx={{
+                            px: 0,
+                            borderRadius: '50%',
+                            bgcolor: tokens.color.secondary,
+                          }}
                         >
-                          +
+                          {t('+')}
                         </Button>
                       </Stack>
                     </Panel>
@@ -228,10 +288,12 @@ export function SetupPage() {
               <Panel>
                 <TextField
                   fullWidth
-                  label="Search by name or function"
-                  value={search}
+                  label={t('Search by name or function')}
+                  value={t(search)}
                   onChange={(e) => setSearch(e.target.value)}
-                  sx={{ mb: 2 }}
+                  sx={{
+                    mb: 2,
+                  }}
                 />
                 {members
                   .filter((m) =>
@@ -243,11 +305,17 @@ export function SetupPage() {
                       direction="row"
                       alignItems="center"
                       gap={1.5}
-                      sx={{ borderBottom: 1, borderColor: 'divider', py: 1 }}
+                      sx={{
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                        py: 1,
+                      }}
                     >
                       <Checkbox
                         checked={state.selected.includes(m.name)}
-                        inputProps={{ 'aria-label': `Select ${m.name}` }}
+                        inputProps={{
+                          'aria-label': t(`Select ${m.name}`),
+                        }}
                         onChange={(_, checked) =>
                           update({
                             selected: checked
@@ -257,46 +325,65 @@ export function SetupPage() {
                         }
                       />
                       <Initials name={m.name} small />
-                      <Box sx={{ flex: 1 }}>
-                        <Typography fontWeight={700}>{m.name}</Typography>
+                      <Box
+                        sx={{
+                          flex: 1,
+                        }}
+                      >
+                        <Typography fontWeight={700}>{t(m.name)}</Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {m.function}
+                          {t(m.function)}
                         </Typography>
                       </Box>
                       {m.team && (
-                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Box
+                          sx={{
+                            display: {
+                              xs: 'none',
+                              sm: 'block',
+                            },
+                          }}
+                        >
                           <TeamTag name={m.team} />
                         </Box>
                       )}
                     </Stack>
                   ))}
                 <Typography variant="caption" color="text.secondary">
-                  Showing 6 of 24 members
+                  {t('Showing 6 of 24 members')}
                 </Typography>
                 <Button onClick={() => setShowAll((v) => !v)}>
-                  {showAll ? 'Show less' : 'Show all'}
+                  {t(showAll ? 'Show less' : 'Show all')}
                 </Button>
                 {showAll && (
                   <Alert severity="info">
-                    The prototype includes these six sample members. The other 18 members are
-                    outside this test scenario.
+                    {t(
+                      'The prototype includes these six sample members. The other 18 members are outside this test scenario.',
+                    )}
                   </Alert>
                 )}
               </Panel>
             )}
           </Box>
-          <Panel sx={{ bgcolor: tokens.color.panel, border: 0 }}>
+          <Panel
+            sx={{
+              bgcolor: tokens.color.panel,
+              border: 0,
+            }}
+          >
             <Stack gap={2}>
               <Typography
                 variant="h4"
                 component="h2"
                 color={current === 3 ? 'primary' : 'text.primary'}
               >
-                {current === 1
-                  ? 'Other teams in your association'
-                  : current === 2
-                    ? 'How goals are used'
-                    : `${state.selected.length + 15} volunteers selected`}
+                {t(
+                  current === 1
+                    ? 'Other teams in your association'
+                    : current === 2
+                      ? 'How goals are used'
+                      : `${state.selected.length + 15} volunteers selected`,
+                )}
               </Typography>
               {current === 2 ? (
                 <>
@@ -311,22 +398,30 @@ export function SetupPage() {
                       'Shifts in the Safety Host Team and the Front desk Team count too.',
                     ],
                   ].map(([label, desc]) => (
-                    <Panel key={label} sx={{ p: 2, border: 0, borderRadius: 2 }}>
-                      <Typography fontWeight={600}>{label}</Typography>
+                    <Panel
+                      key={label}
+                      sx={{
+                        p: 2,
+                        border: 0,
+                        borderRadius: 2,
+                      }}
+                    >
+                      <Typography fontWeight={600}>{t(label)}</Typography>
                       <Typography variant="body2" color="text.secondary" mt={0.5}>
-                        {desc}
+                        {t(desc)}
                       </Typography>
                     </Panel>
                   ))}
                   <Typography variant="caption" color="text.secondary">
-                    You can change goals at any time in Settings.
+                    {t('You can change goals at any time in Settings.')}
                   </Typography>
                 </>
               ) : (
                 <>
                   <Typography variant="body2" color="text.secondary">
-                    Volunteers shared with these teams are counted in the cross-team load, so nobody
-                    is booked twice.
+                    {t(
+                      'Volunteers shared with these teams are counted in the cross-team load, so nobody is booked twice.',
+                    )}
                   </Typography>
                   {['Safety Host Team', 'Front desk Team'].map((team, i) => (
                     <Stack
@@ -335,19 +430,24 @@ export function SetupPage() {
                       gap={1}
                       alignItems="center"
                       flexWrap="wrap"
-                      sx={{ bgcolor: 'white', p: 1.5, borderRadius: 2 }}
+                      sx={{
+                        bgcolor: 'white',
+                        p: 1.5,
+                        borderRadius: 2,
+                      }}
                     >
                       <TeamTag name={team} />
                       <Typography variant="caption" color="text.secondary">
-                        {i === 0 ? 6 : 4} shared volunteers
+                        {t(i === 0 ? 6 : 4)}
+                        {t(' shared volunteers')}
                       </Typography>
                     </Stack>
                   ))}
                   {current === 3 && (
                     <>
-                      <Typography fontWeight={700}>Someone is missing?</Typography>
+                      <Typography fontWeight={700}>{t('Someone is missing?')}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        Invite them with a link. They fill in their own availability.
+                        {t('Invite them with a link. They fill in their own availability.')}
                       </Typography>
                       <Button
                         variant="outlined"
@@ -356,7 +456,7 @@ export function SetupPage() {
                           setDialog('member');
                         }}
                       >
-                        + Add a new member
+                        {t('+ Add a new member')}
                       </Button>
                     </>
                   )}
@@ -367,13 +467,13 @@ export function SetupPage() {
         </Box>
         <Stack direction="row" justifyContent="space-between" mt={3}>
           <Button component={Link} to={current === 1 ? '/coordinator' : `/setup/${current - 1}`}>
-            {current === 1 ? 'Skip for now' : 'Back'}
+            {t(current === 1 ? 'Skip for now' : 'Back')}
           </Button>
           <Button
             variant="contained"
             onClick={() => navigate(current === 3 ? '/coordinator' : `/setup/${current + 1}`)}
           >
-            {current === 3 ? 'Finish setup' : 'Continue'}
+            {t(current === 3 ? 'Finish setup' : 'Continue')}
           </Button>
         </Stack>
       </Box>
@@ -385,11 +485,13 @@ export function SetupPage() {
         aria-labelledby="setup-dialog-title"
       >
         <DialogTitle id="setup-dialog-title">
-          {dialog.startsWith('checklist:')
-            ? `${dialog.split(':')[1]} checklist`
-            : dialog === 'member'
-              ? 'Invite a new member'
-              : 'Add a function'}
+          {t(
+            dialog.startsWith('checklist:')
+              ? `${dialog.split(':')[1]} checklist`
+              : dialog === 'member'
+                ? 'Invite a new member'
+                : 'Add a function',
+          )}
         </DialogTitle>
         <DialogContent>
           {dialog.startsWith('checklist:') ? (
@@ -398,8 +500,8 @@ export function SetupPage() {
                 <TextField
                   key={i}
                   fullWidth
-                  label={`Task ${i + 1}`}
-                  value={task}
+                  label={t(`Task ${i + 1}`)}
+                  value={t(task)}
                   onChange={(e) =>
                     setTasks((items) => items.map((v, n) => (n === i ? e.target.value : v)))
                   }
@@ -410,23 +512,30 @@ export function SetupPage() {
             <TextField
               autoFocus
               fullWidth
-              label={dialog === 'member' ? 'Email address' : 'Function name'}
+              label={t(dialog === 'member' ? 'Email address' : 'Function name')}
               type={dialog === 'member' ? 'email' : 'text'}
-              value={input}
+              value={t(input)}
               onChange={(e) => setInput(e.target.value)}
-              sx={{ mt: 1 }}
+              sx={{
+                mt: 1,
+              }}
             />
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialog('')}>Cancel</Button>
+          <Button onClick={() => setDialog('')}>{t('Cancel')}</Button>
           <Button
             variant="contained"
             disabled={!dialog.startsWith('checklist:') && !input.trim()}
             onClick={() => {
               if (dialog === 'function' && !functions.includes(input.trim()))
-                update({ functions: [...functions, input.trim()] });
-              if (dialog.startsWith('checklist:')) update({ checklistLabels: tasks });
+                update({
+                  functions: [...functions, input.trim()],
+                });
+              if (dialog.startsWith('checklist:'))
+                update({
+                  checklistLabels: tasks,
+                });
               setFeedback(
                 dialog === 'member'
                   ? `Demo invitation prepared for ${input}. No email was sent.`
@@ -435,7 +544,7 @@ export function SetupPage() {
               setDialog('');
             }}
           >
-            Save
+            {t('Save')}
           </Button>
         </DialogActions>
       </Dialog>

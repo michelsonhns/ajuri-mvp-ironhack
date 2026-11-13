@@ -5,6 +5,18 @@ Le formulaire de réponse est intégré à `/#/feedback`, accessible depuis l’
 - [Formulaire public](https://atom-condor-c96.notion.site/33d14d81a0c840efae4c8f0a7e029bb0)
 - [Base privée pour l’analyse](https://app.notion.com/p/1a54325a72e348dba597adb23894337b)
 
+## Version en portugais brésilien
+
+- [Prototype PT-BR](https://michelsonhns.github.io/ajuri-mvp-ironhack/#/?lang=pt-BR)
+- [Formulaire PT-BR](https://atom-condor-c96.notion.site/da48149d32fc485095ce0dbd07661d08)
+- [Base privée PT-BR](https://app.notion.com/p/266f77d5845440a0a17b043450d686e0)
+
+Le sélecteur du prototype choisit automatiquement le bon formulaire. Le contenu des questions, les rôles, les consignes et les échelles sont traduits en portugais brésilien. Les boutons et messages gérés directement par Notion peuvent suivre la langue du navigateur du répondant.
+
+Les deux bases sont séparées. Les colonnes PT-BR correspondent aux mêmes mesures : `Facilidade da tarefa 1–4 (1–7)`, `Satisfação geral (1–5)`, `Papéis testados` et les trois commentaires. La base PT-BR possède ses vues « Respostas dos participantes », « Satisfação baixa · revisar » et « Satisfação média · 1–5 ». Pour réunir les deux cohortes, exporter les données et harmoniser les noms des colonnes ; aucune synchronisation automatique entre bases n’est mise en place.
+
+La réponse `QA-PT-BR — teste técnico` a vérifié la sauvegarde avec les notes 6, 5, 6 et 7 et une satisfaction de 4. Elle est marquée `Teste técnico` et exclue des vues d’analyse.
+
 ## Données collectées
 
 Une ligne correspond à une réponse de session de test. Le participant remplit lui-même le questionnaire ; les données locales du prototype ne sont pas envoyées automatiquement.

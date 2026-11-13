@@ -1,3 +1,4 @@
+import { useTranslation } from '../../i18n/LocaleProvider';
 import { useLayoutEffect, useRef, useState } from 'react';
 import {
   Box,
@@ -11,14 +12,13 @@ import {
 import type { TestInstruction } from '../../domain/testInstructions';
 import { tokens } from '../../theme/tokens';
 import { Link } from 'react-router-dom';
-
 interface Props {
   instruction: TestInstruction;
   onAction: () => void;
   aboveNavigation: boolean;
 }
-
 export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: Props) {
+  const { t } = useTranslation();
   const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
   const compact = instruction.compact || smallScreen;
@@ -45,7 +45,6 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
       document.documentElement.style.removeProperty('--tester-instructions-height');
     };
   }, [bottom, collapsed]);
-
   const toggle = () => {
     setCollapsed((value) => !value);
     requestAnimationFrame(() => toggleRef.current?.focus());
@@ -59,17 +58,19 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
         color: tokens.color.primary,
         flexShrink: 0,
         width: compact ? '100%' : 'auto',
-        '&:hover': { bgcolor: tokens.color.secondary },
+        '&:hover': {
+          bgcolor: tokens.color.secondary,
+        },
       }}
     >
-      {instruction.action === 'next-task' ? 'Next task →' : 'Back to start'}
+      {t(instruction.action === 'next-task' ? 'Next task →' : 'Back to start')}
     </Button>
   );
   const close = (
     <IconButton
       ref={toggleRef}
       onClick={toggle}
-      aria-label="Minimize task instructions"
+      aria-label={t('Minimize task instructions')}
       aria-expanded="true"
       aria-controls="tester-instruction-copy"
       sx={{
@@ -81,26 +82,38 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
         minHeight: 44,
         fontSize: 18,
         flexShrink: 0,
-        '&:hover': { bgcolor: tokens.color.muted },
-        '&:focus-visible': { outlineColor: tokens.color.secondary },
+        '&:hover': {
+          bgcolor: tokens.color.muted,
+        },
+        '&:focus-visible': {
+          outlineColor: tokens.color.secondary,
+        },
       }}
     >
-      <span aria-hidden="true">×</span>
+      <span aria-hidden="true">{t('×')}</span>
     </IconButton>
   );
-
   return (
     <Snackbar
       open
       transitionDuration={0}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
       // Instructions stay available until explicitly minimized or the task changes.
       onClose={(_, reason) => {
         if (reason === 'escapeKeyDown' && !collapsed) toggle();
       }}
       sx={{
-        bottom: { xs: bottom, sm: bottom },
-        left: { xs: '50%', sm: '50%' },
+        bottom: {
+          xs: bottom,
+          sm: bottom,
+        },
+        left: {
+          xs: '50%',
+          sm: '50%',
+        },
         right: 'auto',
         transform: 'translateX(-50%)',
         width: collapsed ? 'auto' : 'calc(100% - 32px)',
@@ -110,7 +123,7 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
       <Box
         ref={containerRef}
         component="aside"
-        aria-label="Tester instructions"
+        aria-label={t('Tester instructions')}
         sx={{
           width: '100%',
           bgcolor: tokens.color.text,
@@ -132,22 +145,34 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
             sx={{
               color: tokens.color.onPrimary,
               whiteSpace: 'nowrap',
-              '&:focus-visible': { outlineColor: tokens.color.secondary },
+              '&:focus-visible': {
+                outlineColor: tokens.color.secondary,
+              },
             }}
           >
-            Show task instructions
+            {t('Show task instructions')}
           </Button>
         ) : (
           <>
             {compact && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
                 <Typography
                   variant="body2"
-                  sx={{ color: tokens.color.catering, flex: 1, fontWeight: 600 }}
+                  sx={{
+                    color: tokens.color.catering,
+                    flex: 1,
+                    fontWeight: 600,
+                  }}
                 >
-                  {instruction.title}
+                  {t(instruction.title)}
                 </Typography>
-                {close}
+                {t(close)}
               </Box>
             )}
             <Box
@@ -155,17 +180,24 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
               role="status"
               aria-live="polite"
               aria-atomic="true"
-              sx={{ flex: 1, minWidth: 0 }}
+              sx={{
+                flex: 1,
+                minWidth: 0,
+              }}
             >
               {!compact && (
                 <Typography
                   variant="body2"
-                  sx={{ color: tokens.color.catering, fontWeight: 600, mb: '2px' }}
+                  sx={{
+                    color: tokens.color.catering,
+                    fontWeight: 600,
+                    mb: '2px',
+                  }}
                 >
-                  {instruction.title}
+                  {t(instruction.title)}
                 </Typography>
               )}
-              <Typography variant="body2">{instruction.description}</Typography>
+              <Typography variant="body2">{t(instruction.description)}</Typography>
             </Box>
             {instruction.action === 'back-to-start' && (
               <Button
@@ -177,14 +209,16 @@ export function InstructionSnackbar({ instruction, onAction, aboveNavigation }: 
                   borderColor: tokens.color.secondary,
                   flexShrink: 0,
                   width: compact ? '100%' : 'auto',
-                  '&:focus-visible': { outlineColor: tokens.color.secondary },
+                  '&:focus-visible': {
+                    outlineColor: tokens.color.secondary,
+                  },
                 }}
               >
-                Give feedback
+                {t('Give feedback')}
               </Button>
             )}
-            {action}
-            {!compact && close}
+            {t(action)}
+            {t(!compact && close)}
           </>
         )}
       </Box>

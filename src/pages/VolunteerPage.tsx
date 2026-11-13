@@ -1,3 +1,4 @@
+import { useTranslation } from '../i18n/LocaleProvider';
 import { useState } from 'react';
 import {
   Alert,
@@ -18,12 +19,12 @@ import { DesignIcon, Panel } from '../components/atoms/Primitives';
 import { ShiftCard } from '../components/molecules/ShiftCard';
 import { useDemo } from '../state/DemoProvider';
 import { tokens } from '../theme/tokens';
-
 export function VolunteerPage({
   screen = 'shifts',
 }: {
   screen?: 'shifts' | 'absence' | 'sent' | 'request' | 'accepted' | 'declined' | 'checklist';
 }) {
+  const { t } = useTranslation();
   const { role = 'pedro' } = useParams();
   const { state, update } = useDemo();
   const navigate = useNavigate();
@@ -46,7 +47,10 @@ export function VolunteerPage({
       setFailed(true);
       return;
     }
-    update({ absence: true, request: 'none' });
+    update({
+      absence: true,
+      request: 'none',
+    });
     navigate(`${base}/sent`);
   };
   return (
@@ -59,9 +63,17 @@ export function VolunteerPage({
         flexDirection: 'column',
       }}
     >
-      <Box component="header" sx={{ px: 2, height: 64, display: 'flex', alignItems: 'center' }}>
+      <Box
+        component="header"
+        sx={{
+          px: 2,
+          height: 64,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <Typography variant="h2" component="h1" color="primary">
-          {title}
+          {t(title)}
         </Typography>
       </Box>
       <Box
@@ -81,14 +93,21 @@ export function VolunteerPage({
         {screen === 'shifts' && (
           <>
             <Typography variant="h2" component="h2">
-              Hi {name}
+              {t('Hi ')}
+              {t(name)}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Your shifts across all your teams
+              {t('Your shifts across all your teams')}
             </Typography>
-            <Box sx={{ bgcolor: tokens.color.infoContainer, borderRadius: '20px', p: 2 }}>
+            <Box
+              sx={{
+                bgcolor: tokens.color.infoContainer,
+                borderRadius: '20px',
+                p: 2,
+              }}
+            >
               <Typography variant="caption" color="info.main" display="block" mb={1}>
-                Reminder · tomorrow
+                {t('Reminder · tomorrow')}
               </Typography>
               <ShiftCard
                 status={!ana && state.absence ? 'Change' : 'Confirmed'}
@@ -106,23 +125,28 @@ export function VolunteerPage({
                     color: 'primary.main',
                     flex: 1,
                     px: 1,
-                    '&:hover': { bgcolor: '#d3d4f2' },
+                    '&:hover': {
+                      bgcolor: '#d3d4f2',
+                    },
                   }}
                 >
-                  See checklist
+                  {t('See checklist')}
                 </Button>
                 <Button
                   variant="outlined"
                   component={Link}
                   to={`${base}/absence`}
-                  sx={{ flex: 1, px: 1 }}
+                  sx={{
+                    flex: 1,
+                    px: 1,
+                  }}
                 >
-                  I can’t come
+                  {t('I can’t come')}
                 </Button>
               </Stack>
             </Box>
             <Typography fontWeight={700} component="h2">
-              Next shifts
+              {t('Next shifts')}
             </Typography>
             <ShiftCard
               team="Safety Host Team"
@@ -139,25 +163,35 @@ export function VolunteerPage({
               e.preventDefault();
               submitAbsence();
             }}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+              flex: 1,
+            }}
           >
             {failed && (
               <Alert severity="error">
-                <Typography fontWeight={700}>Your message wasn’t sent</Typography>Check your
-                connection and try again. Your answers are kept.
+                <Typography fontWeight={700}>{t('Your message wasn’t sent')}</Typography>
+                {t('Check your connection and try again. Your answers are kept.')}
               </Alert>
             )}
             <ShiftCard />
             <Typography component="h2" fontWeight={700}>
-              Reason (optional)
+              {t('Reason (optional)')}
             </Typography>
             <ToggleButtonGroup
               exclusive
               value={state.reason}
-              onChange={(_, value: string | null) => update({ reason: value ?? '' })}
-              aria-label="Reason for absence"
+              onChange={(_, value: string | null) =>
+                update({
+                  reason: value ?? '',
+                })
+              }
+              aria-label={t('Reason for absence')}
               sx={{
                 gap: 1,
+                flexWrap: 'wrap',
                 '& .MuiToggleButton-root': {
                   border: '1px solid',
                   borderColor: 'secondary.main',
@@ -168,161 +202,231 @@ export function VolunteerPage({
             >
               {['Sick', 'Work', 'Family', 'Other'].map((r) => (
                 <ToggleButton value={r} key={r}>
-                  {r}
+                  {t(r)}
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
             <TextField
-              label="Message to Camila (optional)"
+              label={t('Message to Camila (optional)')}
               multiline
               minRows={1}
-              value={state.message}
-              onChange={(e) => update({ message: e.target.value })}
-              helperText="Only Camila will see it"
+              value={t(state.message)}
+              onChange={(e) =>
+                update({
+                  message: e.target.value,
+                })
+              }
+              helperText={t('Only Camila will see it')}
             />
             <FormControlLabel
               control={
-                <Switch checked={state.swap} onChange={(_, checked) => update({ swap: checked })} />
+                <Switch
+                  checked={state.swap}
+                  onChange={(_, checked) =>
+                    update({
+                      swap: checked,
+                    })
+                  }
+                />
               }
-              label="I found someone to swap with"
+              label={t('I found someone to swap with')}
             />
             {state.swap && (
               <TextField
                 required
-                label="Volunteer’s name"
-                value={swapName}
+                label={t('Volunteer’s name')}
+                value={t(swapName)}
                 onChange={(e) => setSwapName(e.target.value)}
               />
             )}
             <Typography variant="body2" color="text.secondary">
-              Camila will be told right away. You don’t need to find someone yourself.
+              {t('Camila will be told right away. You don’t need to find someone yourself.')}
             </Typography>
-            <Box sx={{ flex: 1, minHeight: 100 }} />
+            <Box
+              sx={{
+                flex: 1,
+                minHeight: 100,
+              }}
+            />
             <Button variant="contained" type="submit">
-              {failed ? 'Try again' : 'Tell Camila I can’t come'}
+              {t(failed ? 'Try again' : 'Tell Camila I can’t come')}
             </Button>
           </Box>
         )}
         {screen === 'sent' && (
           <>
-            <Box sx={{ textAlign: 'center', py: 1 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Box
+              sx={{
+                textAlign: 'center',
+                py: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  mb: 2,
+                }}
+              >
                 <DesignIcon name="success-large" />
               </Box>
               <Typography variant="h2" component="h2">
-                Camila has been told
+                {t('Camila has been told')}
               </Typography>
               <Typography color="text.secondary" variant="body2" mt={2}>
-                You don’t need to find someone yourself. We’ll let you know when your shift is
-                covered.
+                {t(
+                  'You don’t need to find someone yourself. We’ll let you know when your shift is covered.',
+                )}
               </Typography>
             </Box>
             <ShiftCard
               status="Change"
               detail="Kitchen · Catering Team · absence reported at 07:42"
             />
-            <Box sx={{ flex: 1, minHeight: 100 }} />
+            <Box
+              sx={{
+                flex: 1,
+                minHeight: 100,
+              }}
+            />
             <Button variant="contained" component={Link} to={base}>
-              Back to my shifts
+              {t('Back to my shifts')}
             </Button>
             <Button
               onClick={() => {
-                update({ absence: false, request: 'none' });
+                update({
+                  absence: false,
+                  request: 'none',
+                });
                 navigate(base);
               }}
             >
-              Withdraw my absence report
+              {t('Withdraw my absence report')}
             </Button>
           </>
         )}
         {screen === 'request' && (
           <>
             <Typography variant="h2" component="h2">
-              Hi {name}
+              {t('Hi ')}
+              {t(name)}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Camila Ferreira needs a hand
+              {t('Camila Ferreira needs a hand')}
             </Typography>
-            <Panel sx={{ bgcolor: tokens.color.secondary, border: 0, p: 2 }}>
+            <Panel
+              sx={{
+                bgcolor: tokens.color.secondary,
+                border: 0,
+                p: 2,
+              }}
+            >
               <Typography variant="h4" component="h2" mb={2}>
-                Can you cover this shift?
+                {t('Can you cover this shift?')}
               </Typography>
               <ShiftCard
                 status="Open position"
                 detail="Kitchen · Catering Team · replaces Pedro (sick)"
               />
               <Typography variant="caption" display="block" mt={2}>
-                Your load this month: 1 / 4 shifts → 2 / 4 if you accept
+                {t('Your load this month: 1 / 4 shifts → 2 / 4 if you accept')}
               </Typography>
             </Panel>
-            <Box sx={{ flex: 1, minHeight: 100 }} />
+            <Box
+              sx={{
+                flex: 1,
+                minHeight: 100,
+              }}
+            />
             <Button
               variant="contained"
               onClick={() => {
-                update({ absence: true, request: 'accepted' });
+                update({
+                  absence: true,
+                  request: 'accepted',
+                });
                 navigate(`${base}/accepted`);
               }}
             >
-              Accept replacement
+              {t('Accept replacement')}
             </Button>
             <Button
               variant="outlined"
               onClick={() => {
-                update({ absence: true, request: 'declined' });
+                update({
+                  absence: true,
+                  request: 'declined',
+                });
                 navigate(`${base}/declined`);
               }}
             >
-              I can’t this time
+              {t('I can’t this time')}
             </Button>
           </>
         )}
         {screen === 'accepted' && (
           <>
             <Typography variant="h2" component="h2" align="center">
-              Thank you, {name}!
+              {t('Thank you, ')}
+              {t(name)}
+              {t('!')}
             </Typography>
             <Typography variant="body2" color="text.secondary" align="center">
-              This shift is now in your schedule. Camila has been told.
+              {t('This shift is now in your schedule. Camila has been told.')}
             </Typography>
             <ShiftCard />
-            <Box sx={{ flex: 1, minHeight: 100 }} />
+            <Box
+              sx={{
+                flex: 1,
+                minHeight: 100,
+              }}
+            />
             <Button variant="contained" component={Link} to={`${base}/checklist`}>
-              See my Kitchen checklist
+              {t('See my Kitchen checklist')}
             </Button>
             <Button component={Link} to={base}>
-              View my shifts
+              {t('View my shifts')}
             </Button>
           </>
         )}
         {screen === 'declined' && (
           <>
             <Alert severity="info">
-              Camila has been told you can’t take this shift. You don’t need to do anything else.
+              {t(
+                'Camila has been told you can’t take this shift. You don’t need to do anything else.',
+              )}
             </Alert>
             <Button component={Link} to={base}>
-              View my shifts
+              {t('View my shifts')}
             </Button>
             <Button component={Link} to="/replacements">
-              Continue as Camila
+              {t('Continue as Camila')}
             </Button>
           </>
         )}
         {screen === 'checklist' && (
           <>
             <Typography variant="body2" color="text.secondary">
-              Sat 14 Nov · 12:00 – 15:00 · Catering Team
+              {t('Sat 14 Nov · 12:00 – 15:00 · Catering Team')}
             </Typography>
-            <Panel sx={{ bgcolor: '#f8f7fc', border: 0, p: 1.5 }}>
+            <Panel
+              sx={{
+                bgcolor: '#f8f7fc',
+                border: 0,
+                p: 1.5,
+              }}
+            >
               <Stack direction="row" justifyContent="space-between" mb={1}>
-                <Typography fontWeight={700}>Kitchen</Typography>
+                <Typography fontWeight={700}>{t('Kitchen')}</Typography>
                 <Typography variant="body2" color="primary" aria-live="polite">
-                  {done} / 7 done
+                  {t(done)}
+                  {t(' / 7 done')}
                 </Typography>
               </Stack>
               <LinearProgress
                 variant="determinate"
                 value={(done / 7) * 100}
-                aria-label="Kitchen checklist completion"
+                aria-label={t('Kitchen checklist completion')}
               />
             </Panel>
             {[
@@ -330,9 +434,17 @@ export function VolunteerPage({
               ['DURING', 3, 5],
               ['AFTER', 5, 7],
             ].map(([label, start, end]) => (
-              <Box component="fieldset" key={label} sx={{ border: 0, m: 0, p: 0 }}>
+              <Box
+                component="fieldset"
+                key={label}
+                sx={{
+                  border: 0,
+                  m: 0,
+                  p: 0,
+                }}
+              >
                 <Typography component="legend" variant="caption" color="text.secondary" mb={1}>
-                  {label}
+                  {t(label)}
                 </Typography>
                 {state.checklistLabels.slice(Number(start), Number(end)).map((task, i) => (
                   <FormControlLabel
@@ -342,7 +454,9 @@ export function VolunteerPage({
                       ml: 0,
                       mr: 0,
                       display: 'flex',
-                      '& .MuiCheckbox-root': { mr: 1 },
+                      '& .MuiCheckbox-root': {
+                        mr: 1,
+                      },
                     }}
                     control={
                       <Checkbox
@@ -356,24 +470,41 @@ export function VolunteerPage({
                         }
                       />
                     }
-                    label={task}
+                    label={t(task)}
                   />
                 ))}
               </Box>
             ))}
-            <Box sx={{ flex: 1 }} />
+            <Box
+              sx={{
+                flex: 1,
+              }}
+            />
             <Typography variant="caption" color="text.secondary">
-              Each function has its own checklist, written by your coordinator.
+              {t('Each function has its own checklist, written by your coordinator.')}
             </Typography>
             <Button component={Link} to={base}>
-              Back to my shifts
+              {t('Back to my shifts')}
             </Button>
           </>
         )}
       </Box>
-      <Box component="footer" sx={{ textAlign: 'center', py: 1 }}>
-        <Button component={Link} to="/" size="small" sx={{ fontSize: 12 }}>
-          Test roles
+      <Box
+        component="footer"
+        sx={{
+          textAlign: 'center',
+          py: 1,
+        }}
+      >
+        <Button
+          component={Link}
+          to="/"
+          size="small"
+          sx={{
+            fontSize: 12,
+          }}
+        >
+          {t('Test roles')}
         </Button>
       </Box>
     </Box>

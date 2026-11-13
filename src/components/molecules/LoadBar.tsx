@@ -1,6 +1,6 @@
+import { useTranslation } from '../../i18n/LocaleProvider';
 import { Box, Stack, Typography } from '@mui/material';
 import { tokens } from '../../theme/tokens';
-
 export function LoadBar({
   total,
   safety = 0,
@@ -10,20 +10,25 @@ export function LoadBar({
   safety?: number;
   limit?: number;
 }) {
+  const { t } = useTranslation();
   return (
     <Stack gap={1}>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="body2" color="text.secondary">
-          This month
+          {t('This month')}
         </Typography>
         <Typography variant="body2">
-          {total} / {limit}
-          {total >= limit ? ' · at limit' : ' shifts'}
+          {t(total)}
+          {t(' / ')}
+          {t(limit)}
+          {t(total >= limit ? ' · at limit' : ' shifts')}
         </Typography>
       </Stack>
       <Box
         role="img"
-        aria-label={`${total} of ${limit} shifts: Catering ${total - safety}, Safety Host ${safety}, Front desk 0`}
+        aria-label={t(
+          `${total} of ${limit} shifts: Catering ${total - safety}, Safety Host ${safety}, Front desk 0`,
+        )}
         sx={{
           height: 12,
           bgcolor: 'divider',
@@ -46,7 +51,12 @@ export function LoadBar({
             bgcolor: tokens.color.cateringChart,
           }}
         />
-        <Box sx={{ width: `${(safety / limit) * 100}%`, bgcolor: tokens.color.safetyChart }} />
+        <Box
+          sx={{
+            width: `${(safety / limit) * 100}%`,
+            bgcolor: tokens.color.safetyChart,
+          }}
+        />
       </Box>
       <Stack direction="row" gap={1.5} flexWrap="wrap">
         {[
@@ -58,13 +68,22 @@ export function LoadBar({
             key={label}
             variant="caption"
             color="text.secondary"
-            sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+            }}
           >
             <Box
               component="span"
-              sx={{ width: 10, height: 10, bgcolor: color, borderRadius: '2px' }}
+              sx={{
+                width: 10,
+                height: 10,
+                bgcolor: color,
+                borderRadius: '2px',
+              }}
             />
-            {label}
+            {t(label)}
           </Typography>
         ))}
       </Stack>

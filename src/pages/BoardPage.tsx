@@ -1,3 +1,4 @@
+import { useTranslation } from '../i18n/LocaleProvider';
 import { useState } from 'react';
 import { Alert, Box, Button, LinearProgress, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -5,8 +6,8 @@ import { AppShell } from '../components/organisms/AppShell';
 import { Initials, Panel, StatusTag, TeamTag } from '../components/atoms/Primitives';
 import { LoadBar } from '../components/molecules/LoadBar';
 import { useDemo } from '../state/DemoProvider';
-
 export function BoardPage({ schedule = false }: { schedule?: boolean }) {
+  const { t } = useTranslation();
   const { state } = useDemo();
   const [filter, setFilter] = useState('All');
   const [dismissed, setDismissed] = useState(false);
@@ -14,33 +15,49 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
   const replaced = state.request === 'accepted';
   const visible = filter === 'All' || filter === 'Catering';
   return (
-    <AppShell title={schedule ? 'Schedule' : 'Live board'} filter={filter} onFilter={setFilter}>
+    <AppShell title={t(schedule ? 'Schedule' : 'Live board')} filter={filter} onFilter={setFilter}>
       <Stack spacing={3}>
         {absent && !dismissed && (
           <Alert
             severity="error"
             action={
-              <Stack direction={{ xs: 'column', sm: 'row' }} gap={1}>
-                <Button onClick={() => setDismissed(true)}>Later</Button>
+              <Stack
+                direction={{
+                  xs: 'column',
+                  sm: 'row',
+                }}
+                gap={1}
+              >
+                <Button onClick={() => setDismissed(true)}>{t('Later')}</Button>
                 <Button component={Link} to="/replacements" variant="contained">
-                  See suggestions
+                  {t('See suggestions')}
                 </Button>
               </Stack>
             }
           >
-            <Typography fontWeight={700}>Pedro Santos can’t come on Saturday</Typography>
+            <Typography fontWeight={700}>{t('Pedro Santos can’t come on Saturday')}</Typography>
             <Typography variant="body2">
-              Catering Team · Kitchen 12:00 – 15:00 now needs 1 replacement · reported at 07:42
+              {t(
+                'Catering Team · Kitchen 12:00 – 15:00 now needs 1 replacement · reported at 07:42',
+              )}
             </Typography>
           </Alert>
         )}
         {replaced && (
           <Alert severity="success">
-            {state.candidate} accepted · Pedro’s Kitchen shift is covered
+            {t(state.candidate)}
+            {t(' accepted · Pedro’s Kitchen shift is covered')}
           </Alert>
         )}
         <Box
-          sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: 3 }}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(3, 1fr)',
+            },
+            gap: 3,
+          }}
         >
           {(absent
             ? [
@@ -62,31 +79,43 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
           ).map(([value, label, context]) => (
             <Panel key={label}>
               <Typography
-                sx={{ fontSize: 36, fontWeight: 800, lineHeight: '44px' }}
+                sx={{
+                  fontSize: 36,
+                  fontWeight: 800,
+                  lineHeight: '44px',
+                }}
                 color="primary"
               >
-                {value}
+                {t(value)}
               </Typography>
-              <Typography fontWeight={700}>{label}</Typography>
+              <Typography fontWeight={700}>{t(label)}</Typography>
               <Typography variant="caption" color="text.secondary">
-                {context}
+                {t(context)}
               </Typography>
             </Panel>
           ))}
         </Box>
         <Typography variant="h3" component="h2">
-          Saturday 14 November
+          {t('Saturday 14 November')}
         </Typography>
         {visible ? (
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+              gridTemplateColumns: {
+                xs: '1fr',
+                md: 'repeat(3, 1fr)',
+              },
               gap: 3,
             }}
           >
             {['Kitchen', 'Service', 'Dishwashing'].map((job, i) => (
-              <Panel key={job} sx={{ borderColor: i === 0 && absent ? 'error.main' : 'divider' }}>
+              <Panel
+                key={job}
+                sx={{
+                  borderColor: i === 0 && absent ? 'error.main' : 'divider',
+                }}
+              >
                 <Stack gap={2}>
                   <Stack direction="row" justifyContent="space-between" flexWrap="wrap" gap={1}>
                     <TeamTag name={state.teamName} />
@@ -94,22 +123,34 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
                   </Stack>
                   <Box>
                     <Typography variant="h4" component="h3">
-                      Sat 14 Nov · {i === 2 ? '15:00 – 18:00' : '12:00 – 15:00'}
+                      {t('Sat 14 Nov · ')}
+                      {t(i === 2 ? '15:00 – 18:00' : '12:00 – 15:00')}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {job} ·{' '}
-                      {i === 0
-                        ? absent
-                          ? 'Pedro Santos can’t come'
-                          : replaced
-                            ? `${state.candidate} replaces Pedro`
-                            : 'Pedro, Inês and João'
-                        : i === 1
-                          ? '3 of 3 confirmed'
-                          : '2 of 2 confirmed'}
+                      {t(job)}
+                      {t(' ·')}
+                      {t(' ')}
+                      {t(
+                        i === 0
+                          ? absent
+                            ? 'Pedro Santos can’t come'
+                            : replaced
+                              ? `${state.candidate} replaces Pedro`
+                              : 'Pedro, Inês and João'
+                          : i === 1
+                            ? '3 of 3 confirmed'
+                            : '2 of 2 confirmed',
+                      )}
                     </Typography>
                   </Box>
-                  <Stack direction="row" sx={{ '& > * + *': { ml: -1 } }}>
+                  <Stack
+                    direction="row"
+                    sx={{
+                      '& > * + *': {
+                        ml: -1,
+                      },
+                    }}
+                  >
                     {[
                       'Camila Ferreira',
                       'João Martins',
@@ -120,7 +161,7 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
                   </Stack>
                   {i === 0 && absent && (
                     <Button variant="contained" component={Link} to="/replacements">
-                      See 3 suggestions
+                      {t('See 3 suggestions')}
                     </Button>
                   )}
                 </Stack>
@@ -128,21 +169,30 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
             ))}
           </Box>
         ) : (
-          <Alert severity="info">No {filter} shifts scheduled for today.</Alert>
+          <Alert severity="info">
+            {t('No ')}
+            {t(filter)}
+            {t(' shifts scheduled for today.')}
+          </Alert>
         )}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', lg: absent || replaced ? '1fr' : '1fr 1fr' },
+            gridTemplateColumns: {
+              xs: '1fr',
+              lg: absent || replaced ? '1fr' : '1fr 1fr',
+            },
             gap: 3,
           }}
         >
           <Panel>
             <Typography variant="h4" component="h2">
-              Cross-team load · November
+              {t('Cross-team load · November')}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Shifts per volunteer across all teams · goal: max {state.goals[1]} per month
+              {t('Shifts per volunteer across all teams · goal: max ')}
+              {t(state.goals[1])}
+              {t(' per month')}
             </Typography>
             <Box
               sx={{
@@ -162,7 +212,7 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
               ].map(([name, total, safety]) => (
                 <Box key={name}>
                   <Typography fontWeight={600} mb={1}>
-                    {name}
+                    {t(name)}
                   </Typography>
                   <LoadBar total={Number(total)} safety={Number(safety)} />
                 </Box>
@@ -172,10 +222,10 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
           {!absent && !replaced && (
             <Panel>
               <Typography variant="h4" component="h2">
-                Semester goals · Spring 2027
+                {t('Semester goals · Spring 2027')}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Set during onboarding · you can change them anytime
+                {t('Set during onboarding · you can change them anytime')}
               </Typography>
               <Stack spacing={2} mt={2}>
                 {[
@@ -194,13 +244,13 @@ export function BoardPage({ schedule = false }: { schedule?: boolean }) {
                 ].map(([label, value, progress]) => (
                   <Box key={label}>
                     <Stack direction="row" justifyContent="space-between" gap={1} mb={0.5}>
-                      <Typography variant="body2">{label}</Typography>
-                      <Typography variant="body2">{value}</Typography>
+                      <Typography variant="body2">{t(label)}</Typography>
+                      <Typography variant="body2">{t(value)}</Typography>
                     </Stack>
                     <LinearProgress
                       variant="determinate"
                       value={Number(progress)}
-                      aria-label={String(label)}
+                      aria-label={t(String(label))}
                     />
                   </Box>
                 ))}

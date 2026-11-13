@@ -1,3 +1,4 @@
+import { useTranslation } from '../i18n/LocaleProvider';
 import { useRef, useState } from 'react';
 import {
   Alert,
@@ -21,8 +22,8 @@ import { AppShell } from '../components/organisms/AppShell';
 import { Initials, Panel, StatusTag, TeamTag } from '../components/atoms/Primitives';
 import { useDemo } from '../state/DemoProvider';
 import { tokens } from '../theme/tokens';
-
 export function TeamPage() {
+  const { t } = useTranslation();
   const { state, update } = useDemo();
   const [editing, setEditing] = useState(false);
   const [profile, setProfile] = useState(state.profile);
@@ -34,7 +35,9 @@ export function TeamPage() {
   const [errors, setErrors] = useState(false);
   const exportData = () => {
     const url = URL.createObjectURL(
-      new Blob([JSON.stringify(state.profile, null, 2)], { type: 'application/json' }),
+      new Blob([JSON.stringify(state.profile, null, 2)], {
+        type: 'application/json',
+      }),
     );
     const a = document.createElement('a');
     a.href = url;
@@ -52,36 +55,50 @@ export function TeamPage() {
       setErrors(true);
       return;
     }
-    update({ profile });
+    update({
+      profile,
+    });
     setEditing(false);
     setErrors(false);
     setFeedback('Changes saved in this prototype.');
   };
   return (
-    <AppShell title={editing ? `Edit ${state.profile.name}` : state.profile.name}>
+    <AppShell title={t(editing ? `Edit ${state.profile.name}` : state.profile.name)}>
       <Stack gap={3}>
         {feedback && (
           <Alert severity="success" onClose={() => setFeedback('')}>
-            {feedback}
+            {t(feedback)}
           </Alert>
         )}
         {state.removed ? (
           <Panel>
             <Typography variant="h3" component="h2">
-              Ana was removed from the Catering Team
+              {t('Ana was removed from the Catering Team')}
             </Typography>
             <Typography mt={2}>
-              She stays in the Safety Host Team. Her upcoming Catering shift is now open.
+              {t('She stays in the Safety Host Team. Her upcoming Catering shift is now open.')}
             </Typography>
-            <Button sx={{ mt: 2 }} onClick={() => update({ removed: false })}>
-              Undo removal
+            <Button
+              sx={{
+                mt: 2,
+              }}
+              onClick={() =>
+                update({
+                  removed: false,
+                })
+              }
+            >
+              {t('Undo removal')}
             </Button>
           </Panel>
         ) : (
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: 'minmax(320px, 440px) 1fr' },
+              gridTemplateColumns: {
+                xs: '1fr',
+                md: 'minmax(320px, 440px) 1fr',
+              },
               gap: 3,
               alignItems: 'start',
             }}
@@ -92,10 +109,10 @@ export function TeamPage() {
                   <Initials name={state.profile.name} />
                   <Box>
                     <Typography variant="h2" component="h2">
-                      {state.profile.name}
+                      {t(state.profile.name)}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Kitchen · Service · volunteer since Sep 2025
+                      {t('Kitchen · Service · volunteer since Sep 2025')}
                     </Typography>
                   </Box>
                 </Stack>
@@ -108,8 +125,8 @@ export function TeamPage() {
                     {(['name', 'phone', 'email', 'limit'] as const).map((key, i) => (
                       <TextField
                         key={key}
-                        label={['Full name', 'Phone', 'Email', 'Monthly limit (all teams)'][i]}
-                        value={profile[key]}
+                        label={t(['Full name', 'Phone', 'Email', 'Monthly limit (all teams)'][i])}
+                        value={t(profile[key])}
                         type={
                           key === 'limit'
                             ? 'number'
@@ -127,15 +144,15 @@ export function TeamPage() {
                               !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) ||
                             (key === 'limit' && (profile.limit < 1 || profile.limit > 31)))
                         }
-                        helperText={
+                        helperText={t(
                           errors && (key === 'name' || key === 'email' || key === 'limit')
                             ? 'Enter a valid value.'
                             : key === 'phone'
                               ? 'Ana prefers WhatsApp'
                               : key === 'limit'
                                 ? 'Ana can lower it in her app'
-                                : undefined
-                        }
+                                : undefined,
+                        )}
                         onChange={(e) =>
                           setProfile((p) => ({
                             ...p,
@@ -144,14 +161,20 @@ export function TeamPage() {
                         }
                       />
                     ))}
-                    <Typography fontWeight={700}>Functions in the Catering Team</Typography>
+                    <Typography fontWeight={700}>{t('Functions in the Catering Team')}</Typography>
                     <ToggleButtonGroup
                       value={profile.functions}
                       onChange={(_, values: string[]) =>
-                        setProfile((p) => ({ ...p, functions: values }))
+                        setProfile((p) => ({
+                          ...p,
+                          functions: values,
+                        }))
                       }
-                      aria-label="Volunteer functions"
-                      sx={{ flexWrap: 'wrap', gap: 1 }}
+                      aria-label={t('Volunteer functions')}
+                      sx={{
+                        flexWrap: 'wrap',
+                        gap: 1,
+                      }}
                     >
                       {['Kitchen', 'Service', 'Dishwashing', 'Reception'].map((f) => (
                         <ToggleButton
@@ -163,14 +186,19 @@ export function TeamPage() {
                             borderRadius: '8px !important',
                           }}
                         >
-                          {f}
+                          {t(f)}
                         </ToggleButton>
                       ))}
                     </ToggleButtonGroup>
                   </>
                 ) : (
                   <>
-                    <Box component="dl" sx={{ m: 0 }}>
+                    <Box
+                      component="dl"
+                      sx={{
+                        m: 0,
+                      }}
+                    >
                       {[
                         ['Phone', state.profile.phone],
                         ['Email', state.profile.email],
@@ -189,14 +217,17 @@ export function TeamPage() {
                           }}
                         >
                           <Typography component="dt" variant="body2" color="text.secondary">
-                            {label}
+                            {t(label)}
                           </Typography>
                           <Typography
                             component="dd"
                             variant="body2"
-                            sx={{ m: 0, overflowWrap: 'anywhere' }}
+                            sx={{
+                              m: 0,
+                              overflowWrap: 'anywhere',
+                            }}
                           >
-                            {value}
+                            {t(value)}
                           </Typography>
                         </Box>
                       ))}
@@ -204,16 +235,19 @@ export function TeamPage() {
                     <Stack direction="row" gap={1} flexWrap="wrap">
                       <Button
                         variant="contained"
-                        sx={{ bgcolor: tokens.color.secondary, color: 'primary.main' }}
+                        sx={{
+                          bgcolor: tokens.color.secondary,
+                          color: 'primary.main',
+                        }}
                         onClick={() => {
                           setProfile(structuredClone(state.profile));
                           setEditing(true);
                         }}
                       >
-                        Edit
+                        {t('Edit')}
                       </Button>
                       <Button variant="outlined" onClick={() => setMessageOpen(true)}>
-                        Send a message
+                        {t('Send a message')}
                       </Button>
                     </Stack>
                   </>
@@ -225,11 +259,12 @@ export function TeamPage() {
                 <>
                   <Panel>
                     <Typography variant="h4" component="h2">
-                      Who can see what
+                      {t('Who can see what')}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" my={2}>
-                      Ana helps two teams. Choose what the Safety Host Team coordinator can see. Ana
-                      sees these settings in her app.
+                      {t(
+                        'Ana helps two teams. Choose what the Safety Host Team coordinator can see. Ana sees these settings in her app.',
+                      )}
                     </Typography>
                     {[
                       'Phone number · Safety Host Team coordinator',
@@ -257,12 +292,18 @@ export function TeamPage() {
                             }
                           />
                         }
-                        label={label}
+                        label={t(label)}
                       />
                     ))}
-                    <Alert severity="info" sx={{ mt: 2 }}>
-                      Ana gets a notification when you change her data. Only the fields above are
-                      stored: no address, birth date or documents.
+                    <Alert
+                      severity="info"
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
+                      {t(
+                        'Ana gets a notification when you change her data. Only the fields above are stored: no address, birth date or documents.',
+                      )}
                     </Alert>
                   </Panel>
                   <Stack direction="row" justifyContent="end" gap={1}>
@@ -272,10 +313,10 @@ export function TeamPage() {
                         setErrors(false);
                       }}
                     >
-                      Cancel
+                      {t('Cancel')}
                     </Button>
                     <Button variant="contained" onClick={save}>
-                      Save changes
+                      {t('Save changes')}
                     </Button>
                   </Stack>
                 </>
@@ -283,18 +324,28 @@ export function TeamPage() {
                 <>
                   <Panel>
                     <Stack direction="row" justifyContent="space-between">
-                      <Typography fontWeight={700}>November · across all teams</Typography>
-                      <Typography color="primary">3 of {state.profile.limit} shifts</Typography>
+                      <Typography fontWeight={700}>{t('November · across all teams')}</Typography>
+                      <Typography color="primary">
+                        {t('3 of ')}
+                        {t(state.profile.limit)}
+                        {t(' shifts')}
+                      </Typography>
                     </Stack>
                     <LinearProgress
                       variant="determinate"
                       value={Math.min(100, (3 / state.profile.limit) * 100)}
-                      aria-label="Monthly volunteer load"
-                      sx={{ my: 2 }}
+                      aria-label={t('Monthly volunteer load')}
+                      sx={{
+                        my: 2,
+                      }}
                     />
                     <Typography variant="caption" color="text.secondary">
-                      {Math.max(0, state.profile.limit - 3)} shift left before her monthly limit.
-                      Ajuri will not suggest Ana once she reaches {state.profile.limit}.
+                      {t(Math.max(0, state.profile.limit - 3))}
+                      {t(
+                        ' shift left before her monthly limit. Ajuri will not suggest Ana once she reaches ',
+                      )}
+                      {t(state.profile.limit)}
+                      {t('.')}
                     </Typography>
                     {[
                       ['Sat 7 Nov', 'Catering Team · Kitchen 9:00 – 14:00'],
@@ -307,29 +358,47 @@ export function TeamPage() {
                         alignItems="center"
                         flexWrap="wrap"
                         key={day}
-                        sx={{ py: 1.5, borderBottom: i === 2 ? 0 : 1, borderColor: 'divider' }}
+                        sx={{
+                          py: 1.5,
+                          borderBottom: i === 2 ? 0 : 1,
+                          borderColor: 'divider',
+                        }}
                       >
-                        <Typography fontWeight={700}>{day}</Typography>
-                        <Typography variant="body2" sx={{ flex: 1 }}>
-                          {detail}
+                        <Typography fontWeight={700}>{t(day)}</Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            flex: 1,
+                          }}
+                        >
+                          {t(detail)}
                         </Typography>
                         <StatusTag status={i === 2 ? 'Pending' : 'Confirmed'} />
                       </Stack>
                     ))}
                   </Panel>
-                  <Panel sx={{ bgcolor: tokens.color.panel, border: 0 }}>
+                  <Panel
+                    sx={{
+                      bgcolor: tokens.color.panel,
+                      border: 0,
+                    }}
+                  >
                     <Stack direction="row" justifyContent="space-between">
                       <Typography variant="h4" component="h2">
-                        Personal data & privacy
+                        {t('Personal data & privacy')}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        GDPR
+                        {t('GDPR')}
                       </Typography>
                     </Stack>
                     <Box
                       sx={{
                         display: 'grid',
-                        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', xl: 'repeat(4, 1fr)' },
+                        gridTemplateColumns: {
+                          xs: '1fr',
+                          sm: '1fr 1fr',
+                          xl: 'repeat(4, 1fr)',
+                        },
                         gap: 2,
                         mt: 2,
                       }}
@@ -346,12 +415,19 @@ export function TeamPage() {
                         ['Consent', 'Given by Ana on 2 Sep 2026, when she joined.'],
                         ['How long', 'Deleted 12 months after her last shift.'],
                       ].map(([label, desc]) => (
-                        <Panel key={label} sx={{ p: 2, border: 0, borderRadius: 2 }}>
+                        <Panel
+                          key={label}
+                          sx={{
+                            p: 2,
+                            border: 0,
+                            borderRadius: 2,
+                          }}
+                        >
                           <Typography variant="body2" fontWeight={600}>
-                            {label}
+                            {t(label)}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            {desc}
+                            {t(desc)}
                           </Typography>
                         </Panel>
                       ))}
@@ -364,10 +440,10 @@ export function TeamPage() {
                       mt={2}
                     >
                       <Button variant="outlined" onClick={exportData}>
-                        Export Ana’s data
+                        {t('Export Ana’s data')}
                       </Button>
                       <Button color="error" onClick={() => setRemoveOpen(true)}>
-                        Remove from team
+                        {t('Remove from team')}
                       </Button>
                     </Stack>
                   </Panel>
@@ -378,31 +454,38 @@ export function TeamPage() {
         )}
       </Stack>
       <Dialog
-        slotProps={{ transition: { onEntered: () => cancelRef.current?.focus() } }}
+        slotProps={{
+          transition: {
+            onEntered: () => cancelRef.current?.focus(),
+          },
+        }}
         open={removeOpen}
         onClose={() => setRemoveOpen(false)}
         aria-labelledby="remove-title"
         aria-describedby="remove-description"
       >
-        <DialogTitle id="remove-title">Remove Ana from the Catering Team?</DialogTitle>
+        <DialogTitle id="remove-title">{t('Remove Ana from the Catering Team?')}</DialogTitle>
         <DialogContent>
           <DialogContentText id="remove-description">
-            Ana stays in the Safety Host Team. Her 1 upcoming Catering shift (Sat 21 Nov) becomes
-            open and you get replacement suggestions. The Catering Team stops seeing her data.
+            {t(
+              'Ana stays in the Safety Host Team. Her 1 upcoming Catering shift (Sat 21 Nov) becomes open and you get replacement suggestions. The Catering Team stops seeing her data.',
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button ref={cancelRef} autoFocus onClick={() => setRemoveOpen(false)}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button
             variant="contained"
             onClick={() => {
-              update({ removed: true });
+              update({
+                removed: true,
+              });
               setRemoveOpen(false);
             }}
           >
-            Remove from team
+            {t('Remove from team')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -412,24 +495,34 @@ export function TeamPage() {
         fullWidth
         aria-labelledby="message-title"
       >
-        <DialogTitle id="message-title">Message to {state.profile.name}</DialogTitle>
+        <DialogTitle id="message-title">
+          {t('Message to ')}
+          {t(state.profile.name)}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
-            label="Message"
-            value={message}
+            label={t('Message')}
+            value={t(message)}
             onChange={(e) => setMessage(e.target.value)}
             fullWidth
             multiline
             minRows={3}
-            sx={{ mt: 1 }}
+            sx={{
+              mt: 1,
+            }}
           />
-          <Alert severity="info" sx={{ mt: 2 }}>
-            Prototype only: no message will be sent.
+          <Alert
+            severity="info"
+            sx={{
+              mt: 2,
+            }}
+          >
+            {t('Prototype only: no message will be sent.')}
           </Alert>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setMessageOpen(false)}>Cancel</Button>
+          <Button onClick={() => setMessageOpen(false)}>{t('Cancel')}</Button>
           <Button
             disabled={!message.trim()}
             variant="contained"
@@ -438,7 +531,7 @@ export function TeamPage() {
               setFeedback('Demo message saved for this session. No message was sent.');
             }}
           >
-            Save demo message
+            {t('Save demo message')}
           </Button>
         </DialogActions>
       </Dialog>

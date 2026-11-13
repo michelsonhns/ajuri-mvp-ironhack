@@ -35,7 +35,7 @@ Les SVG Figma sont conservés dans `public/assets/`. Aucune URL temporaire Figma
 
 ## Tester les parcours
 
-L’interface est en anglais, conformément aux écrans de démonstration Figma.
+L’interface est disponible en anglais et en portugais brésilien. Le sélecteur **English / Português (Brasil)** conserve le parcours et les données en cours. Le lien `/#/?lang=pt-BR` ouvre directement la version brésilienne ; `lang=en` ouvre la version anglaise. La préférence est mémorisée dans le navigateur lorsque le stockage local est disponible.
 
 1. **Pedro** : mes créneaux → signaler une absence → confirmation. En mode hors ligne, le formulaire conserve les réponses et propose de réessayer.
 2. **Camila** : tableau de bord → alerte d’absence → suggestions classées selon la charge → envoyer une demande.
@@ -48,6 +48,8 @@ Le lien « Test roles » revient à l’accueil. « Reset prototype data » réi
 Les consignes de la section Figma **9 · Test EN** apparaissent dans des snackbars persistantes : tâche 1 sur le tableau de bord, tâche 2 pour Pedro, tâche 3 après signalement d’une absence et tâche 4 sur la demande d’Ana. « Next task → » simule l’absence de Pedro pour passer de la tâche 1 à la tâche 3. Les écrans de fin des tâches 2, 3 et 4 affichent la question de facilité, « Give feedback » et « Back to start ». Les consignes peuvent être réduites puis rouvertes ; elles n’expirent pas et leur espace est réservé pour laisser les actions accessibles.
 
 Le [questionnaire de satisfaction](docs/feedback.md), accessible depuis l’accueil et les fins de tâche, enregistre les réponses dans une base Notion privée via un formulaire public intégré. Il recueille les rôles, la facilité de chaque tâche essayée, la satisfaction globale et des commentaires. La saisie et l’envoi sont volontaires ; les données du prototype ne sont pas transmises automatiquement.
+
+La version PT-BR utilise un formulaire et une base Notion distincts afin de conserver la version anglaise et de séparer les cohortes de test. Les questions et les échelles sont équivalentes. Les traductions se trouvent dans `src/i18n/`, les identifiants métier et les données saisies restent indépendants de la langue d’affichage.
 
 Les données restent dans le navigateur (`localStorage`, clé `ajuri-prototype-v1`). Les onglets partagent les données après rechargement ; aucune synchronisation serveur n’est prévue. Les invitations et messages sont simulés, sans envoi externe. Le semestre et les noms sont des données de démonstration. Ne pas saisir de données personnelles réelles.
 

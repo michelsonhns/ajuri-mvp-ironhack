@@ -4,7 +4,7 @@ Le RGAA est la cible de conception. Ce document décrit les vérifications du pr
 
 ## Mesures intégrées
 
-- Langue `en` cohérente avec les écrans anglais de la maquette.
+- Langue du document `en` ou `pt-BR` cohérente avec le choix d’affichage, sélecteur dont chaque nom de langue porte son propre attribut `lang`.
 - Un titre principal par page, sections et listes de champs structurées.
 - Régions `header`, `nav`, `main`, lien d’évitement et titre de document actualisé.
 - Éléments natifs et composants MUI pour boutons, liens, champs, cases à cocher, interrupteurs et dialogues.

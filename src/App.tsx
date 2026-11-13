@@ -1,3 +1,4 @@
+import { useTranslation } from './i18n/LocaleProvider';
 import { useEffect } from 'react';
 import { HashRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
@@ -8,19 +9,25 @@ import { VolunteerPage } from './pages/VolunteerPage';
 import { SetupPage } from './pages/SetupPage';
 import { TeamPage } from './pages/TeamPage';
 import { ChecklistsPage } from './pages/ChecklistsPage';
+import { LanguageSwitcher } from './components/molecules/LanguageSwitcher';
 import { TesterInstructions } from './components/organisms/TesterInstructions';
 import { FeedbackPage } from './pages/FeedbackPage';
-
 function RouteFocus() {
+  const { locale } = useTranslation();
   const { pathname } = useLocation();
   useEffect(() => {
     document.title = `${document.querySelector('h1')?.textContent ?? 'Prototype'} · Ajuri`;
+  }, [pathname, locale]);
+  useEffect(() => {
     window.scrollTo(0, 0);
-    document.getElementById('main-content')?.focus({ preventScroll: true });
+    document.getElementById('main-content')?.focus({
+      preventScroll: true,
+    });
   }, [pathname]);
   return null;
 }
 export function App() {
+  const { t } = useTranslation();
   return (
     <HashRouter>
       <a
@@ -31,10 +38,15 @@ export function App() {
           document.getElementById('main-content')?.focus();
         }}
       >
-        Skip to main content
+        {t('Skip to main content')}
       </a>
+      <LanguageSwitcher />
       <RouteFocus />
-      <Box sx={{ pb: 'var(--tester-instructions-height, 0px)' }}>
+      <Box
+        sx={{
+          pb: 'var(--tester-instructions-height, 0px)',
+        }}
+      >
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route path="/feedback" element={<FeedbackPage />} />
@@ -57,12 +69,19 @@ export function App() {
           <Route
             path="*"
             element={
-              <Box component="main" id="main-content" tabIndex={-1} sx={{ p: 4 }}>
+              <Box
+                component="main"
+                id="main-content"
+                tabIndex={-1}
+                sx={{
+                  p: 4,
+                }}
+              >
                 <Typography component="h1" variant="h1">
-                  Page not found
+                  {t('Page not found')}
                 </Typography>
                 <Button component={Link} to="/">
-                  Back to test roles
+                  {t('Back to test roles')}
                 </Button>
               </Box>
             }

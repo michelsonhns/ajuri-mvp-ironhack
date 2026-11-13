@@ -1,3 +1,4 @@
+import { useTranslation } from '../../i18n/LocaleProvider';
 import {
   Box,
   Button,
@@ -9,7 +10,6 @@ import {
 } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { DesignIcon, Initials, Logo, type IconName } from '../atoms/Primitives';
-
 const navigation: [string, string, IconName][] = [
   ['/coordinator', 'Live board', 'layers'],
   ['/schedule', 'Schedule', 'calendar'],
@@ -27,35 +27,72 @@ export function AppShell({
   filter?: string;
   onFilter?: (value: string) => void;
 }) {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   return (
-    <Box sx={{ pl: { xs: 0, md: '80px' }, pb: { xs: '88px', md: 3 }, minHeight: '100dvh' }}>
+    <Box
+      sx={{
+        pl: {
+          xs: 0,
+          md: '80px',
+        },
+        pb: {
+          xs: '88px',
+          md: 3,
+        },
+        minHeight: '100dvh',
+      }}
+    >
       <Box
         component="nav"
-        aria-label="Main navigation"
+        aria-label={t('Main navigation')}
         sx={{
           position: 'fixed',
           zIndex: 1100,
           left: 0,
-          top: { md: 0 },
+          top: {
+            md: 0,
+          },
           bottom: 0,
-          width: { xs: '100%', md: 80 },
+          width: {
+            xs: '100%',
+            md: 80,
+          },
           bgcolor: 'background.paper',
-          borderRight: { md: 1 },
-          borderTop: { xs: 1, md: 0 },
+          borderRight: {
+            md: 1,
+          },
+          borderTop: {
+            xs: 1,
+            md: 0,
+          },
           borderColor: 'divider',
           display: 'flex',
-          flexDirection: { xs: 'row', md: 'column' },
+          flexDirection: {
+            xs: 'row',
+            md: 'column',
+          },
           alignItems: 'center',
-          gap: { md: 1.5 },
-          py: { xs: 1, md: 3 },
+          gap: {
+            md: 1.5,
+          },
+          py: {
+            xs: 1,
+            md: 3,
+          },
         }}
       >
         <Box
           component={Link}
           to="/"
-          aria-label="Ajuri prototype home"
-          sx={{ mb: 4, display: { xs: 'none', md: 'block' } }}
+          aria-label={t('Ajuri prototype home')}
+          sx={{
+            mb: 4,
+            display: {
+              xs: 'none',
+              md: 'block',
+            },
+          }}
         >
           <Logo />
         </Box>
@@ -72,7 +109,10 @@ export function AppShell({
             sx={{
               p: 0.5,
               minWidth: 0,
-              width: { xs: '25%', md: 80 },
+              width: {
+                xs: '25%',
+                md: 80,
+              },
               fontSize: 13,
               fontWeight: 600,
               color: 'text.secondary',
@@ -80,7 +120,9 @@ export function AppShell({
               gap: 0.5,
               '&[aria-current]': {
                 color: 'text.primary',
-                '& .nav-icon': { backgroundColor: '#f1f2fc' },
+                '& .nav-icon': {
+                  backgroundColor: '#f1f2fc',
+                },
               },
             }}
           >
@@ -96,15 +138,22 @@ export function AppShell({
             >
               <DesignIcon name={icon} />
             </Box>
-            {label}
+            {t(label)}
           </Button>
         ))}
         <Button
           component={Link}
           to="/"
-          sx={{ mt: 'auto', fontSize: 12, display: { xs: 'none', md: 'flex' } }}
+          sx={{
+            mt: 'auto',
+            fontSize: 12,
+            display: {
+              xs: 'none',
+              md: 'flex',
+            },
+          }}
         >
-          Test roles
+          {t('Test roles')}
         </Button>
       </Box>
       <Stack
@@ -112,14 +161,23 @@ export function AppShell({
         direction="row"
         alignItems="center"
         spacing={2}
-        sx={{ minHeight: 72, px: 3, flexWrap: 'wrap', py: 1 }}
+        sx={{
+          minHeight: 72,
+          px: 3,
+          flexWrap: 'wrap',
+          py: 1,
+        }}
       >
-        <Box sx={{ flex: 1 }}>
+        <Box
+          sx={{
+            flex: 1,
+          }}
+        >
           <Typography variant="h2" component="h1" color="primary">
-            {title}
+            {t(title)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Saturday 14 November · 3 teams
+            {t('Saturday 14 November · 3 teams')}
           </Typography>
         </Box>
         {onFilter && (
@@ -128,25 +186,39 @@ export function AppShell({
             exclusive
             value={filter}
             onChange={(_, v: string | null) => v && onFilter(v)}
-            aria-label="Filter by team"
+            aria-label={t('Filter by team')}
             sx={{
-              display: { xs: 'none', lg: 'flex' },
-              '& .MuiToggleButton-root': { px: 2, minHeight: 40 },
+              display: {
+                xs: 'none',
+                lg: 'flex',
+              },
+              '& .MuiToggleButton-root': {
+                px: 2,
+                minHeight: 40,
+              },
             }}
           >
-            {['All', 'Front desk', 'Safety Host', 'Catering'].map((t) => (
-              <ToggleButton key={t} value={t}>
-                {filter === t && (
-                  <Box sx={{ mr: 1 }}>
+            {['All', 'Front desk', 'Safety Host', 'Catering'].map((team) => (
+              <ToggleButton key={team} value={team}>
+                {filter === team && (
+                  <Box
+                    sx={{
+                      mr: 1,
+                    }}
+                  >
                     <DesignIcon name="check" />
                   </Box>
                 )}
-                {t}
+                {t(team)}
               </ToggleButton>
             ))}
           </ToggleButtonGroup>
         )}
-        <IconButton component={Link} to="/replacements" aria-label="View absence notifications">
+        <IconButton
+          component={Link}
+          to="/replacements"
+          aria-label={t('View absence notifications')}
+        >
           <DesignIcon name="bell" />
         </IconButton>
         <Initials name="Camila Ferreira" />
@@ -155,9 +227,16 @@ export function AppShell({
         component="main"
         id="main-content"
         tabIndex={-1}
-        sx={{ px: { xs: 2, md: 3 }, pt: 3, outline: 'none' }}
+        sx={{
+          px: {
+            xs: 2,
+            md: 3,
+          },
+          pt: 3,
+          outline: 'none',
+        }}
       >
-        {children}
+        {t(children)}
       </Box>
     </Box>
   );
